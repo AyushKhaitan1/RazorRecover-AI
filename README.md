@@ -2,7 +2,11 @@
 
 > **Razorpay AI Builder Internship 2026 Submission**  
 > **Track**: `Track 03: AI Revenue Recovery`  
-> **Tech Stack**: MERN Stack (MongoDB, Express.js, React + Vite, Node.js) with Razorpay Test Mode API & AI Agentic Reasoning.
+> **Tech Stack**: MERN Stack (MongoDB, Express.js, React + Vite, Node.js) with Razorpay Test Mode API & AI Agentic Reasoning.  
+> 
+> 🌐 **Live Web Application**: [https://razorrecover-ai-tmxm.onrender.com/](https://razorrecover-ai-tmxm.onrender.com/)  
+> ⚙️ **Live Backend API**: [https://razorrecover-ai-backend.onrender.com/](https://razorrecover-ai-backend.onrender.com/)  
+> 🎬 **Pitch Video Script**: [PITCH_VIDEO_SCRIPT.md](./PITCH_VIDEO_SCRIPT.md) | **Application Answers**: [SUBMISSION_ANSWERS.md](./SUBMISSION_ANSWERS.md)
 
 ---
 
