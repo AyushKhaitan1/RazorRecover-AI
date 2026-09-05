@@ -2,7 +2,6 @@
 
 > **Razorpay AI Builder Internship 2026 Submission**  
 > **Track**: `Track 03: AI Revenue Recovery`  
-> **Applicant**: Ayush Khaitan (`ayushkhaitan2004@gmail.com`)  
 > **Tech Stack**: MERN Stack (MongoDB, Express.js, React + Vite, Node.js) with Razorpay Test Mode API & AI Agentic Reasoning.
 
 ---
