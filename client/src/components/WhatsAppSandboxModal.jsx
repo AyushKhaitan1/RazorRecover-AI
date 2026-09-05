@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Send, PhoneCall, Check, CheckCheck, ExternalLink, ShieldCheck, AlertTriangle } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import api from '../services/apiClient';
 
 export default function WhatsAppSandboxModal({ txn, onClose, onPaymentSettled }) {
   const [messages, setMessages] = useState([]);
@@ -43,12 +44,7 @@ export default function WhatsAppSandboxModal({ txn, onClose, onPaymentSettled })
     setIsSending(true);
 
     try {
-      const res = await fetch(`http://localhost:5000/api/transactions/${txn.id}/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-      });
-      const data = await res.json();
+      const data = await api.sendChatMessage(txn.id, text);
 
       setTimeout(() => {
         const replyMsg = {
@@ -73,10 +69,7 @@ export default function WhatsAppSandboxModal({ txn, onClose, onPaymentSettled })
 
   const handleSimulatePayment = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/api/transactions/${txn.id}/pay`, {
-        method: 'POST'
-      });
-      const data = await res.json();
+      const data = await api.simulatePayment(txn.id);
       
       confetti({
         particleCount: 100,

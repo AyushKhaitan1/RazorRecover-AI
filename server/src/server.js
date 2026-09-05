@@ -3,6 +3,9 @@ const cors = require('cors');
 const config = require('./config');
 const apiRoutes = require('./routes/api');
 
+const path = require('path');
+const fs = require('fs');
+
 const app = express();
 
 app.use(cors());
@@ -21,6 +24,16 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+// Serve frontend build if present (e.g. unified deployment or production build)
+const clientDist = path.join(__dirname, '../../client/dist');
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path === '/health') return next();
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
 
 const server = app.listen(config.PORT, () => {
   console.log(`=======================================================`);

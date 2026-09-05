@@ -6,18 +6,7 @@ import TransactionTable from './components/TransactionTable';
 import WhatsAppSandboxModal from './components/WhatsAppSandboxModal';
 import AuditTrailDrawer from './components/AuditTrailDrawer';
 import confetti from 'canvas-confetti';
-
-// Smart fetcher that uses Vite proxy /api or falls back to direct port 5000
-async function apiFetch(endpoint, options = {}) {
-  try {
-    const res = await fetch(`/api${endpoint}`, options);
-    if (res.ok) return await res.json();
-  } catch (err) {
-    // Fallback directly to port 5000
-  }
-  const fallbackRes = await fetch(`http://localhost:5000/api${endpoint}`, options);
-  return await fallbackRes.json();
-}
+import api from './services/apiClient';
 
 export default function App() {
   const [metrics, setMetrics] = useState(null);
@@ -33,13 +22,13 @@ export default function App() {
   const [isAuditOpen, setIsAuditOpen] = useState(false);
   const [auditFilterTxnId, setAuditFilterTxnId] = useState(null);
 
-  // Load state from backend
+  // Load state from backend (with automatic in-browser fallback if backend unavailable)
   const loadData = async () => {
     try {
       const [mData, tData, aData] = await Promise.all([
-        apiFetch('/metrics'),
-        apiFetch('/transactions'),
-        apiFetch('/audits')
+        api.getMetrics(),
+        api.getTransactions(),
+        api.getAuditLogs()
       ]);
 
       if (mData) setMetrics(mData);
@@ -118,7 +107,7 @@ export default function App() {
   const handleRunBatch = async () => {
     setIsRunning(true);
     try {
-      const data = await apiFetch('/batch/recover', { method: 'POST' });
+      const data = await api.runBatchRecovery();
       await loadData();
 
       if (data?.summary && data.summary.recovered > 0) {
@@ -138,7 +127,7 @@ export default function App() {
   // Reset Batch
   const handleResetBatch = async () => {
     try {
-      await apiFetch('/batch/reset', { method: 'POST' });
+      await api.resetBatch();
       setStatusFilter('all');
       setArchetypeFilter('all');
       setSearchTerm('');
@@ -151,7 +140,7 @@ export default function App() {
   // 1-Click Pay simulation
   const handleSimulatePay = async (txn) => {
     try {
-      await apiFetch(`/transactions/${txn.id}/pay`, { method: 'POST' });
+      await api.simulatePayment(txn.id);
       confetti({
         particleCount: 90,
         spread: 70,
